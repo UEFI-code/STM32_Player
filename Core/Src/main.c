@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "mylib233.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,7 +94,9 @@ int main(void)
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_UART_Receive_IT(&huart1, (uint8_t*)UART_Recieve_Buffer, 2);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1); // Start PWM on channel 1
+  DbgPrint("Hello From STM32\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -102,7 +104,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
