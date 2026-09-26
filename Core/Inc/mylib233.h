@@ -19,3 +19,5 @@ extern uint8_t UART_Recieve_Buffer[];
 
 #define Quick_Write_GPIO_Pin(GPIOx, Pin, Value) \
   GPIOx->BSRR = (uint32_t)(Pin * Value) | ((uint32_t)((~(Pin * Value)) & Pin) << 16)
+
+void myUART_RxHandler(UART_HandleTypeDef *huart);
