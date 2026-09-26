@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "stm32f1xx_hal.h"
 
 extern UART_HandleTypeDef huart1;
 
 extern char DbgPrint_Buffer[];
-extern uint8_t UART_Recieve_Buffer[];
+extern char UART_Recieve_Buffer[];
 
 #define DbgPrint(...) \
   sprintf(DbgPrint_Buffer, __VA_ARGS__); \
@@ -21,3 +22,7 @@ extern uint8_t UART_Recieve_Buffer[];
   GPIOx->BSRR = (uint32_t)(Pin * Value) | ((uint32_t)((~(Pin * Value)) & Pin) << 16)
 
 void myUART_RxHandler(UART_HandleTypeDef *huart);
+void softmoe_update_pwm();
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
