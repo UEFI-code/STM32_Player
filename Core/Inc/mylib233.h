@@ -5,7 +5,9 @@
 extern UART_HandleTypeDef huart1;
 
 extern char DbgPrint_Buffer[];
-extern uint8_t UART_Recieve_Buffer[];
+extern uint8_t Buffer_A[];
+extern uint8_t Buffer_B[];
+extern uint8_t play_buf_id;
 
 #define DbgPrint(...) \
   sprintf(DbgPrint_Buffer, __VA_ARGS__); \
@@ -21,3 +23,4 @@ extern uint8_t UART_Recieve_Buffer[];
   GPIOx->BSRR = (uint32_t)(Pin * Value) | ((uint32_t)((~(Pin * Value)) & Pin) << 16)
 
 void myUART_RxHandler(UART_HandleTypeDef *huart);
+void play_tick();
