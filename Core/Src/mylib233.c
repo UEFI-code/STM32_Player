@@ -2,7 +2,7 @@
 
 char DbgPrint_Buffer[1024] = {0};
 char UART_Recieve_Buffer[1024] = {0};
-uint16_t freq = 440;
+uint16_t freq_a = 440, freq_b = 880;
 
 void myUART_RxPraser()
 {
@@ -10,10 +10,10 @@ void myUART_RxPraser()
     {
         DbgPrint("Hello World\n");
     }
-    else if(strncmp(UART_Recieve_Buffer, "set freq ", 9) == 0)
+    else if(strncmp(UART_Recieve_Buffer, "set dtmf ", 9) == 0)
     {
-        freq = strtol(UART_Recieve_Buffer + 9, NULL, 0);
-        DbgPrint("Set freq: %d\n", freq);
+        sscanf(UART_Recieve_Buffer + 9, "%hu %hu", &freq_a, &freq_b);
+        DbgPrint("Set DTMF frequencies: %hu Hz, %hu Hz\n", freq_a, freq_b);
     }
     else
     {
@@ -51,11 +51,13 @@ const float sin_table[] = {0.00,0.02,0.03,0.05,0.07,0.09,0.10,0.12,0.14,0.16,0.1
 
 void softmoe_update_pwm()
 {
-    static float angle = 0;
-    uint16_t pwm_value = (sin_table[(uint16_t)angle] + 1.0) * htim1.Instance->ARR / 2; // Scale to PWM range
+    static float angle_a = 0, angle_b = 0;
+    uint16_t pwm_value = (sin_table[(uint16_t)angle_a] + sin_table[(uint16_t)angle_b] + 2.0) * htim1.Instance->ARR / 4; // Scale to PWM range
     Quick_Update_TIM_PWM_Pulse(&htim1, TIM_CHANNEL_1, pwm_value);
     // gap_time: 1 / 16384 s
     // angle_delta = gap_time * freq * 360
-    angle += freq * 360 / 16384;
-    if (angle >= 360) angle -= 360;
+    angle_a += freq_a * 360 / 16384;
+    if (angle_a >= 360) angle_a -= 360;
+    angle_b += freq_b * 360 / 16384;
+    if (angle_b >= 360) angle_b -= 360;
 }

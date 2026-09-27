@@ -13,7 +13,7 @@ delay = json_data['delta']
 
 while True:
     for value in json_data['data']:
-        freq = int(value[0])
-        print(f"Setting frequency to {freq} Hz")
-        ser.write(f'set freq {freq}\n'.encode())
+        freq_a, freq_b = int(value[0]), int(value[1])
+        print(f"Setting frequency to {freq_a} Hz & {freq_b} Hz")
+        ser.write(f'set dtmf {freq_a} {freq_b}\n'.encode())
         time.sleep(delay)
