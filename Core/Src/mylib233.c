@@ -51,10 +51,11 @@ const float sin_table[] = {0.00,0.02,0.03,0.05,0.07,0.09,0.10,0.12,0.14,0.16,0.1
 
 void softmoe_update_pwm()
 {
-    static uint16_t angle = 0;
-    uint16_t pwm_value = (sin_table[angle] + 1.0) * htim1.Instance->ARR / 2; // Scale to PWM range
+    static float angle = 0;
+    uint16_t pwm_value = (sin_table[(uint16_t)angle] + 1.0) * htim1.Instance->ARR / 2; // Scale to PWM range
     Quick_Update_TIM_PWM_Pulse(&htim1, TIM_CHANNEL_1, pwm_value);
     // gap_time: 1 / 16384 s
     // angle_delta = gap_time * freq * 360
-    angle = (angle + (uint32_t)freq * 360 / 16384) % 360;
+    angle += freq * 360 / 16384;
+    if (angle > 360) angle -= 360;
 }
