@@ -17,6 +17,7 @@ def worker():
         # encode the target value as a 16-bit integer, little-endian
         if len(data_chunk) > 1024:
             ser.write(data_chunk)
+            ser.flush()
             data_chunk = b''
         
 
