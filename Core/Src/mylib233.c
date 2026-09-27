@@ -57,5 +57,5 @@ void softmoe_update_pwm()
     // gap_time: 1 / 16384 s
     // angle_delta = gap_time * freq * 360
     angle += freq * 360 / 16384;
-    if (angle > 360) angle -= 360;
+    if (angle >= 360) angle -= 360;
 }
