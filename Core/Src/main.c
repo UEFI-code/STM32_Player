@@ -105,6 +105,21 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1); // Start PWM on channel 1
   HAL_TIM_Base_Start_IT(&htim2);
   DbgPrint("Hello From STM32\r\n");
+  uint8_t sd_buf[512];
+  if(HAL_SD_ReadBlocks(&hsd, sd_buf, 0, 1, 1000) == HAL_OK)
+  {
+    DbgPrint("SD Card Read Successful\r\n");
+    DbgPrint("First 16 bytes of SD Card Block 0:\r\n");
+    for(int i = 0; i < 16; i++)
+    {
+      DbgPrint("%02X ", sd_buf[i]);
+    }
+    DbgPrint("\r\n");
+  }
+  else
+  {
+    DbgPrint("SD Card Read Failed\r\n");
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
