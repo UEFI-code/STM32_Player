@@ -1,5 +1,7 @@
 #include "mylib233.h"
 
+extern SPI_HandleTypeDef hspi2;
+
 char DbgPrint_Buffer[1024] = {0};
 char UART_Recieve_Buffer[1024] = {0};
 uint16_t freq_a = 440, freq_b = 880;
@@ -14,6 +16,29 @@ void myUART_RxPraser()
     {
         sscanf(UART_Recieve_Buffer + 9, "%hu %hu", &freq_a, &freq_b);
         DbgPrint("Set DTMF frequencies: %hu Hz, %hu Hz\n", freq_a, freq_b);
+    }
+    else if(strncmp(UART_Recieve_Buffer, "CS 0", 4) == 0)
+    {
+        Quick_Write_GPIO_Pin(GPIOB, GPIO_PIN_12, 0);
+        DbgPrint("CS set to 0\n");
+    }
+    else if(strncmp(UART_Recieve_Buffer, "CS 1", 4) == 0)
+    {
+        Quick_Write_GPIO_Pin(GPIOB, GPIO_PIN_12, 1);
+        DbgPrint("CS set to 1\n");
+    }
+    else if(strncmp(UART_Recieve_Buffer, "SPI send ", 9) == 0)
+    {
+        uint8_t data;
+        sscanf(UART_Recieve_Buffer + 9, "%x", &data);
+        HAL_SPI_Transmit(&hspi2, &data, 1, 1000);
+        DbgPrint("SPI sent: %02X\n", data);
+    }
+    else if(strncmp(UART_Recieve_Buffer, "SPI recv", 8) == 0)
+    {
+        uint8_t data;
+        HAL_SPI_Receive(&hspi2, &data, 1, 1000);
+        DbgPrint("SPI received: %02X\n", data);
     }
     else
     {
