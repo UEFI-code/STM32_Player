@@ -4,7 +4,7 @@ extern SPI_HandleTypeDef hspi2;
 
 char DbgPrint_Buffer[1024] = {0};
 char UART_Recieve_Buffer[1024] = {0};
-uint16_t freq_a = 440, freq_b = 880;
+uint16_t dtmf_freq[2] = {440, 880};
 
 void myUART_RxPraser()
 {
@@ -14,8 +14,8 @@ void myUART_RxPraser()
     }
     else if(strncmp(UART_Recieve_Buffer, "set dtmf ", 9) == 0)
     {
-        sscanf(UART_Recieve_Buffer + 9, "%hu %hu", &freq_a, &freq_b);
-        DbgPrint("Set DTMF frequencies: %hu Hz, %hu Hz\n", freq_a, freq_b);
+        sscanf(UART_Recieve_Buffer + 9, "%hu %hu", dtmf_freq, dtmf_freq + 1);
+        DbgPrint("Set DTMF frequencies: %hu Hz, %hu Hz\n", dtmf_freq[0], dtmf_freq[1]);
     }
     else if(strncmp(UART_Recieve_Buffer, "CS 0", 4) == 0)
     {
@@ -81,8 +81,8 @@ void softmoe_update_pwm()
     Quick_Update_TIM_PWM_Pulse(&htim1, TIM_CHANNEL_1, pwm_value);
     // gap_time: 1 / 16384 s
     // angle_delta = gap_time * freq * 360
-    angle_a += freq_a * 360 / 16384;
+    angle_a += dtmf_freq[0] * 360 / 16384;
     if (angle_a >= 360) angle_a -= 360;
-    angle_b += freq_b * 360 / 16384;
+    angle_b += dtmf_freq[1] * 360 / 16384;
     if (angle_b >= 360) angle_b -= 360;
 }
