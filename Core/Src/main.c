@@ -105,6 +105,26 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1); // Start PWM on channel 1
   HAL_TIM_Base_Start_IT(&htim2);
   DbgPrint("Hello From STM32\r\n");
+  // reset SPI flash
+  Quick_Write_GPIO_Pin(GPIOB, GPIO_PIN_12, 1);
+  HAL_Delay(100);
+  Quick_Write_GPIO_Pin(GPIOB, GPIO_PIN_12, 0);
+  HAL_Delay(100);
+  // prepare read from SPI flash, addr 0
+  HAL_SPI_Transmit(&hspi2, "\x03\x00\x00\x00", 4, 1000);
+  // play DTMF from SPI flash
+  while (1)
+  {
+    HAL_SPI_Receive(&hspi2, (uint8_t*)dtmf_freq, 4, 1000);
+    DbgPrint("Playing DTMF from SPI: %hu Hz, %hu Hz\n", dtmf_freq[0], dtmf_freq[1]);
+    if (dtmf_freq[0] == 0xffff && dtmf_freq[1] == 0xffff)
+    {
+      DbgPrint("End of DTMF playback\n");
+      dtmf_freq[0] = 440; dtmf_freq[1] = 660;
+      break; // Exit the loop if both frequencies are zero
+    }
+    HAL_Delay(30);
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */

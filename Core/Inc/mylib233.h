@@ -7,6 +7,7 @@ extern UART_HandleTypeDef huart1;
 
 extern char DbgPrint_Buffer[];
 extern char UART_Recieve_Buffer[];
+extern uint16_t dtmf_freq[];
 
 #define DbgPrint(...) \
   sprintf(DbgPrint_Buffer, __VA_ARGS__); \
