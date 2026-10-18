@@ -40,6 +40,17 @@ void myUART_RxPraser()
         HAL_SPI_Receive(&hspi2, &data, 1, 1000);
         DbgPrint("SPI received: %02X\n", data);
     }
+    else if(strncmp(UART_Recieve_Buffer, "store dtmf ", 11) == 0)
+    {
+        sscanf(UART_Recieve_Buffer + 11, "%hu %hu", dtmf_freq, dtmf_freq + 1);
+        HAL_SPI_Transmit(&hspi2, (uint8_t*)dtmf_freq, 4, 1000);
+        DbgPrint("Stored DTMF frequencies to SPI: %hu Hz, %hu Hz\n", dtmf_freq[0], dtmf_freq[1]);
+    }
+    else if(strncmp(UART_Recieve_Buffer, "read dtmf", 9) == 0)
+    {
+        HAL_SPI_Receive(&hspi2, (uint8_t*)dtmf_freq, 4, 1000);
+        DbgPrint("Read DTMF frequencies from SPI: %hu Hz, %hu Hz\n", dtmf_freq[0], dtmf_freq[1]);
+    }
     else
     {
         DbgPrint("Unknown Command\n");
