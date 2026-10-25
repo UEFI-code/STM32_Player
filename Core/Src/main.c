@@ -123,7 +123,7 @@ int main(void)
       dtmf_freq[0] = 440; dtmf_freq[1] = 660;
       break; // Exit the loop if both frequencies are zero
     }
-    HAL_Delay(30);
+    HAL_Delay(40);
   }
   /* USER CODE END 2 */
 
