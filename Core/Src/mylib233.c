@@ -6,11 +6,23 @@ char DbgPrint_Buffer[1024] = {0};
 char UART_Recieve_Buffer[1024] = {0};
 uint16_t dtmf_freq[2] = {440, 880};
 
+uint8_t locked = 0;
+
 void myUART_RxPraser()
 {
     if(strcmp(UART_Recieve_Buffer, "Hi") == 0)
     {
         DbgPrint("Hello World\n");
+    }
+    else if(strncmp(UART_Recieve_Buffer, "lock", 4) == 0)
+    {
+        locked = 1;
+        DbgPrint("Locking the system\n");
+    }
+    else if(strncmp(UART_Recieve_Buffer, "unlock", 6) == 0)
+    {
+        locked = 0;
+        DbgPrint("Unlocking the system\n");
     }
     else if(strncmp(UART_Recieve_Buffer, "set dtmf ", 9) == 0)
     {

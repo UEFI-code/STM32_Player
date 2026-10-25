@@ -9,6 +9,8 @@ extern char DbgPrint_Buffer[];
 extern char UART_Recieve_Buffer[];
 extern uint16_t dtmf_freq[];
 
+extern uint8_t locked;
+
 #define DbgPrint(...) \
   sprintf(DbgPrint_Buffer, __VA_ARGS__); \
   HAL_UART_Transmit(&huart1, (uint8_t*)DbgPrint_Buffer, strlen(DbgPrint_Buffer), 1000)

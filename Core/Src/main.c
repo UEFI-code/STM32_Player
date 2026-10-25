@@ -115,6 +115,7 @@ int main(void)
   // play DTMF from SPI flash
   while (1)
   {
+    while (locked) HAL_Delay(100); // Wait here if locked
     HAL_SPI_Receive(&hspi2, (uint8_t*)dtmf_freq, 4, 1000);
     DbgPrint("Playing DTMF from SPI: %hu Hz, %hu Hz\n", dtmf_freq[0], dtmf_freq[1]);
     if (dtmf_freq[0] == 0xffff && dtmf_freq[1] == 0xffff)
